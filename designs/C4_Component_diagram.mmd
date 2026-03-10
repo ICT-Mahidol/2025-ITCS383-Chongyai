@@ -1,0 +1,60 @@
+C4Component
+    title Component Diagram for Backend System
+
+    Container_Boundary(backend, "Backend [Code System Logic]") {
+        Component(auth, "Authentication", "Component", "Handles user login, sessions, and token validation.")
+        Component(user_mgmt, "User Management", "Component", "Manages user profiles and roles.")
+        Component(search, "Search", "Component", "Provides search functionality for jobs and candidates.")
+        Component(job_mgmt, "Job Management", "Component", "Handles job posting and lifecycle.")
+        Component(app, "Application (for apply)", "Component", "Manages the job application process.")
+        Component(interview, "Interview", "Component", "Schedules and manages interview workflows.")
+        Component(bookmark, "Bookmark", "Component", "Allows users to save jobs/profiles.")
+        Component(recommend, "Recommendation", "Component", "AI-driven job/candidate matching.")
+        Component(reporting, "Generate Report", "Component", "Generates system-wide analytics.")
+        Component(id_verify, "Identity Verification", "Component", "Interface for user credential validation.")
+        Component(chatbot, "Chatbot", "Component", "Logic for handling automated chat interactions.")
+        Component(security, "Security", "Component", "Centralized data validation and system integrity.")
+        Component(payment,"Payment", "Component", "Payment")
+    }
+
+    System_Ext(ui, "Web Frontend", "React/JS Web App")
+    System_Ext(pay_svc, "Payment Service", "Node.js Service")
+    System_Ext(chat_svc, "Chatbot Service", "Python AI Service")
+    System_Ext(verify_svc, "ID Verification Service", "Python Service")
+    System_Ext(conf_svc, "Internal Conference Service", "Media Services")
+    System_Ext(bots, "Chatbot Service", "Python")
+
+    ContainerDb(db, "Primary Database", "PostgreSQL", "Stores core application data.")
+    ContainerDb(report_db, "Report Database", "PostgreSQL", "Stores analytical and audit data.")
+
+    %% Relationships
+    Rel(ui, chatbot, "Makes API calls to", "JSON/HTTPS")
+    Rel(ui, bookmark, "Makes API calls to", "JSON/HTTPS")
+    Rel(ui, search, "Makes API calls to", "JSON/HTTPS")
+    Rel(ui, auth, "Makes API calls to", "JSON/HTTPS")
+
+    Rel(job_mgmt, app, "accpt/reject)
+
+    Rel(auth, security, "vlidate authentication token")
+    Rel(auth, security, "send data")
+    Rel(auth, interview, "send info")
+
+    Rel(interview, conf_svc, "send time slot")
+
+    Rel(bookmark, security, "send data")
+
+    Rel(recommend, db, "send data")
+
+    Rel(payment, pay_svc, "proces")
+    Rel(payment, security, "send data")
+
+    Rel(reporting, security, "keep data")
+
+    Rel(id_verify, security, "validate velification")
+    Rel(id_verify, verify_svc, "send data")
+
+    Rel(chatbot, security, "use data")
+    Rel(chatbot, bots, "process")
+
+    Rel(security, report_db, "send data")
+    Rel(security, db, "send data")

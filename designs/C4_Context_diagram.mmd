@@ -1,0 +1,33 @@
+C4Context
+
+    title System Context diagram for Job Management System
+
+    Person(ru, "Recruitment Unit", "Posts job announcements, manages vacancies, reviews applicant profiles, conducts video interviews, and pays service fees upon successful hiring.")
+
+    Person(admin, "Administrator", "Monitors platform health, manages user accounts, handles chatbot escalations, and analyzes strategic reports.")
+
+    Person(applicant, "Applicant", "Searches and bookmarks jobs, completes Thai ID verification, applies for positions, and participates in video interviews.")
+
+    System(job_manage, "Job Management System", "A specialized recruitment portal for Thai citizens that facilitates job matching, automated interviews, and secure payment processing.")
+
+
+
+    System_Ext(moi, "MOI API", "Thai Government service used to verify National ID and citizenship status.")
+
+
+
+    System_Ext(bank, "Banking System", "External payment gateway used to process credit card transactions and secure fees.")
+
+
+
+    Rel(ru, job_manage, "post job/review app")
+
+    Rel(applicant, job_manage, "register/search/apply")
+
+    Rel(admin, job_manage, "view report/manage system")
+
+
+
+    Rel(job_manage, moi, "Verify citizen ID", "HTTPS/JSON")
+
+    Rel(job_manage, bank, "Process payment", "HTTPS/TLS")
