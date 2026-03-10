@@ -291,6 +291,18 @@ Please replace the file with 'next.config.js' or 'next.config.mjs'.
 
 ---
 
+### Issue 7: Build Error - Missing profile properties in `AuthUser`
+
+**Problem:** Frontend build failed in `ApplicantProfilePage` because `AuthUser` type was missing the `applicantProfile` property.
+
+**Root Cause:** The `AuthUser` interface in `frontend/src/types/index.ts` was an incomplete subset of the `User` entity, and backend auth routes didn't join related profile tables.
+
+**Fix:** 
+1. Added `applicantProfile?: ApplicantProfile | null;` and `recruiterProfile?: RecruiterProfile | null;` to the `AuthUser` interface.
+2. Updated `/api/auth/register` and `/api/auth/login` in `auth.routes.ts` to include `applicantProfile` and `recruiterProfile` in the Prisma select block.
+
+---
+
 ---
 
 ## 📁 Final File Structure
@@ -462,4 +474,4 @@ npm run dev
 
 ---
 
-**AI Assistant:** Claude (Anthropic) / opencode
+**AI Assistant:** Claude (Anthropic) / opencode / Antigravity

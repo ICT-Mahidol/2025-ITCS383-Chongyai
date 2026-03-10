@@ -72,6 +72,8 @@ router.post(
           isVerified: true,
           isPaid: true,
           createdAt: true,
+          applicantProfile: true,
+          recruiterProfile: true,
         },
       });
 
@@ -103,6 +105,8 @@ router.post(
           isVerified: true,
           isPaid: true,
           profileImageUrl: true,
+          applicantProfile: true,
+          recruiterProfile: true,
         },
       });
 

@@ -196,6 +196,8 @@ export interface AuthUser {
   isVerified: boolean;
   isPaid: boolean;
   profileImageUrl: string | null;
+  applicantProfile?: ApplicantProfile | null;
+  recruiterProfile?: RecruiterProfile | null;
 }
 
 export interface LoginResponse {
