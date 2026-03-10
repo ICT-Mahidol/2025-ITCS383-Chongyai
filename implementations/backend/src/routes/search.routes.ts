@@ -1,0 +1,93 @@
+import { Router, Request, Response, NextFunction } from 'express';
+import { JobType, Prisma } from '@prisma/client';
+import { prisma } from '../lib/prisma';
+import { successResponse, paginatedResponse } from '../lib/response';
+
+const router = Router();
+
+router.get(
+  '/jobs',
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const page = Math.max(1, parseInt(String(req.query.page ?? '1'), 10));
+      const limit = Math.min(50, Math.max(1, parseInt(String(req.query.limit ?? '20'), 10)));
+
+      const q = req.query.q as string | undefined;
+      const jobType = req.query.jobType as JobType | undefined;
+      const location = req.query.location as string | undefined;
+      const salaryMin = req.query.salaryMin ? parseInt(String(req.query.salaryMin), 10) : undefined;
+      const salaryMax = req.query.salaryMax ? parseInt(String(req.query.salaryMax), 10) : undefined;
+      const skillsParam = req.query.skills as string | undefined;
+      const skills = skillsParam ? skillsParam.split(',').map((s) => s.trim()).filter(Boolean) : undefined;
+
+      const where: Prisma.JobWhereInput = {
+        isActive: true,
+        ...(q && {
+          OR: [
+            { title: { contains: q, mode: 'insensitive' } },
+            { description: { contains: q, mode: 'insensitive' } },
+            { requirements: { contains: q, mode: 'insensitive' } },
+          ],
+        }),
+        ...(jobType && { jobType }),
+        ...(location && { location: { contains: location, mode: 'insensitive' } }),
+        ...(salaryMin !== undefined && { salaryMax: { gte: salaryMin } }),
+        ...(salaryMax !== undefined && { salaryMin: { lte: salaryMax } }),
+        ...(skills && skills.length > 0 && { skills: { hasSome: skills } }),
+      };
+
+      const [jobs, total] = await prisma.$transaction([
+        prisma.job.findMany({
+          where,
+          skip: (page - 1) * limit,
+          take: limit,
+          include: {
+            recruiter: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                recruiterProfile: { select: { companyName: true } },
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        }),
+        prisma.job.count({ where }),
+      ]);
+
+      paginatedResponse(res, jobs, total, page, limit);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+router.get(
+  '/suggestions',
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const q = req.query.q as string | undefined;
+      if (!q || q.trim().length === 0) {
+        successResponse(res, []);
+        return;
+      }
+
+      const jobs = await prisma.job.findMany({
+        where: {
+          isActive: true,
+          title: { contains: q, mode: 'insensitive' },
+        },
+        select: { id: true, title: true },
+        take: 10,
+        distinct: ['title'],
+      });
+
+      successResponse(res, jobs);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+export default router;

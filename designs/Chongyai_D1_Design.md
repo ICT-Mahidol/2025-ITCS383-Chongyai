@@ -7,9 +7,9 @@
 
 The Job Center Management System is designed to support both Functional Requirements and Non-functional Requirements, specifically handling a transaction volume of 10,000 items per day and supporting 1,000 concurrent users 24/7.
 
-- **Component Boundaries & Responsibilities:** The architecture is divided into two main parts: the Web Frontend (Next.js) for managing UI/UX with a modern orange-yellow theme, and the Backend API (Golang) for handling core Business Logic. This separation ensures system scalability to handle higher loads. Internally, the Backend is modularized into components such as Authentication, Job Management, and Payment to ensure high maintainability.
+- **Component Boundaries & Responsibilities:** The architecture is divided into two main parts: the Web Frontend (Next.js) for managing UI/UX with a modern orange-yellow theme, and the Backend API (ExpressJS) for handling core Business Logic. This separation ensures system scalability to handle higher loads. Internally, the Backend is modularized into components such as Authentication, Job Management, and Payment to ensure high maintainability.
 - **Interactions with External Systems:** The system integrates with the MOI API for 13-digit Thai Citizen ID verification and a Banking System for processing service fees (500 THB for applicants and 5,000 THB for recruitment units). Decoupling these external integrations reduces internal complexity and enhances security.
-- **How Models Relate to Requirements:** 
+- **How Models Relate to Requirements:**
   - **Use Case Diagram:** Illustrates the functions accessible to each actor group (Applicant, Recruitment Unit, Admin), ensuring alignment with User Requirements.
   - **C4 Diagrams:** Provide an architectural overview from the Context level down to internal Components, demonstrating how the system is organized and partitioned.
   - **Data Flow Diagram (DFD):** Describes the flow of personal and payment data, addressing critical security requirements.

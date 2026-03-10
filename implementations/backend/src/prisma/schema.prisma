@@ -1,0 +1,243 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  APPLICANT
+  RECRUITER
+  ADMIN
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
+}
+
+enum ApplicationStatus {
+  APPLIED
+  REVIEWING
+  INTERVIEWING
+  ACCEPTED
+  REJECTED
+}
+
+enum InterviewType {
+  IN_PERSON
+  VIDEO
+  PHONE
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum ConferenceStatus {
+  WAITING
+  ACTIVE
+  ENDED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  FAILED
+}
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  passwordHash     String
+  role             Role
+  firstName        String
+  lastName         String
+  phone            String?
+  citizenId        String?
+  isVerified       Boolean   @default(false)
+  isPaid           Boolean   @default(false)
+  profileImageUrl  String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  applicantProfile     ApplicantProfile?
+  recruiterProfile     RecruiterProfile?
+  jobs                 Job[]
+  applications         Application[]
+  bookmarks            Bookmark[]
+  sentMessages         Message[]            @relation("SentMessages")
+  payments             Payment[]
+  verification         Verification?
+  conferenceParticipants ConferenceParticipant[]
+}
+
+model ApplicantProfile {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  resumeUrl           String?
+  skills              String[]
+  experience          String?
+  education           String?
+  preferredLocation   String?
+  preferredSalaryMin  Int?
+  preferredSalaryMax  Int?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RecruiterProfile {
+  id                  String  @id @default(cuid())
+  userId              String  @unique
+  companyName         String
+  companyDescription  String?
+  website             String?
+  industry            String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Job {
+  id           String    @id @default(cuid())
+  recruiterId  String
+  title        String
+  description  String
+  requirements String
+  location     String
+  jobType      JobType
+  salaryMin    Int?
+  salaryMax    Int?
+  skills       String[]
+  viewCount    Int       @default(0)
+  isActive     Boolean   @default(true)
+  expiresAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  recruiter    User          @relation(fields: [recruiterId], references: [id], onDelete: Cascade)
+  applications Application[]
+  bookmarks    Bookmark[]
+}
+
+model Application {
+  id           String            @id @default(cuid())
+  applicantId  String
+  jobId        String
+  status       ApplicationStatus @default(APPLIED)
+  coverLetter  String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  applicant  User        @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  job        Job         @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  interviews Interview[]
+
+  @@unique([applicantId, jobId])
+}
+
+model Interview {
+  id            String          @id @default(cuid())
+  applicationId String
+  scheduledAt   DateTime
+  duration      Int             @default(60)
+  type          InterviewType
+  status        InterviewStatus @default(SCHEDULED)
+  notes         String?
+  conferenceId  String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  application Application  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  conference  Conference?  @relation(fields: [conferenceId], references: [id])
+}
+
+model Bookmark {
+  id          String   @id @default(cuid())
+  applicantId String
+  jobId       String
+  createdAt   DateTime @default(now())
+
+  applicant User @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  job       Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([applicantId, jobId])
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  senderId   String?
+  receiverId String?
+  content    String
+  isBot      Boolean  @default(false)
+  sessionId  String
+  createdAt  DateTime @default(now())
+
+  sender User? @relation("SentMessages", fields: [senderId], references: [id], onDelete: SetNull)
+}
+
+model Conference {
+  id        String           @id @default(cuid())
+  roomCode  String           @unique
+  title     String
+  status    ConferenceStatus @default(WAITING)
+  startedAt DateTime?
+  endedAt   DateTime?
+  createdAt DateTime         @default(now())
+
+  participants ConferenceParticipant[]
+  interviews   Interview[]
+}
+
+model ConferenceParticipant {
+  id           String    @id @default(cuid())
+  conferenceId String
+  userId       String
+  joinedAt     DateTime?
+  leftAt       DateTime?
+
+  conference Conference @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conferenceId, userId])
+}
+
+model Payment {
+  id             String        @id @default(cuid())
+  userId         String
+  amount         Int
+  status         PaymentStatus @default(PENDING)
+  transactionRef String?
+  paymentMethod  String?
+  paidAt         DateTime?
+  createdAt      DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Verification {
+  id         String             @id @default(cuid())
+  userId     String             @unique
+  citizenId  String
+  status     VerificationStatus @default(PENDING)
+  verifiedAt DateTime?
+  createdAt  DateTime           @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

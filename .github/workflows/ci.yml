@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: |
+          implementations/frontend/package-lock.json
+          implementations/backend/package-lock.json
+
+    - name: Install Frontend Dependencies
+      run: npm install
+      working-directory: implementations/frontend
+
+    - name: Build Frontend
+      run: npm run build
+      working-directory: implementations/frontend
+
+    - name: Install Backend Dependencies
+      run: npm install
+      working-directory: implementations/backend
+
+    - name: Build Backend
+      run: npm run build
+      working-directory: implementations/backend
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
