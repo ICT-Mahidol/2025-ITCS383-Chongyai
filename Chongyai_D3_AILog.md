@@ -303,6 +303,16 @@ Please replace the file with 'next.config.js' or 'next.config.mjs'.
 
 ---
 
+### Issue 8: Build Error - Missing `isActive` property in `CreateJobForm`
+
+**Problem:** Frontend build failed in `RecruiterJobsPage` because `updateJob` was called with `isActive`, but the `CreateJobForm` type (used as `Partial<CreateJobForm>`) didn't include it.
+
+**Root Cause:** The `CreateJobForm` interface in `frontend/src/types/index.ts` was missing the `isActive` field, which is required for deactivating/activating jobs from the dashboard.
+
+**Fix:** Added `isActive?: boolean;` to the `CreateJobForm` interface in `types/index.ts`.
+
+---
+
 ---
 
 ## 📁 Final File Structure

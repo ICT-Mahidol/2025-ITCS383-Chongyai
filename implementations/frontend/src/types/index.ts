@@ -231,6 +231,7 @@ export interface CreateJobForm {
   salaryMax?: number;
   skills: string[];
   expiresAt?: string;
+  isActive?: boolean;
 }
 
 export interface SearchFilters {
