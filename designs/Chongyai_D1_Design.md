@@ -10,8 +10,11 @@
 # Usecase Diagram
 ![alt text](Usecase_Diagram.png)
 
-# Data Flow Diagram
-![alt text](Data_Flow_Diagram.png)
+# Data Flow Diagram Level 0
+![alt text](Data_Flow_Diagram_Level0.png)
+
+# Data Flow Diagram Level 1
+![alt text](Data_Flow_Diagram_Level1.png)
 
 # Class Diagram
 ![alt text](Class_Diagram.png)
