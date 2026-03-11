@@ -30,10 +30,8 @@ export default function ApplicantDashboard() {
         setBookmarkCount(appsRes.data.pagination.total);
         setBookmarkCount(bookmarksRes.data.pagination.total);
 
-        if (user?.isPaid) {
-          const recRes = await api.get<ApiResponse<Job[]>>('/recommendations');
-          setRecommendations(recRes.data.data.slice(0, 3));
-        }
+        const recRes = await api.get<ApiResponse<Job[]>>('/recommendations');
+        setRecommendations(recRes.data.data.slice(0, 3));
       } catch {
         // continue with partial data
       } finally {
@@ -58,19 +56,6 @@ export default function ApplicantDashboard() {
       </div>
 
       {/* Alerts */}
-      {!user?.isPaid && (
-        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <p className="font-medium text-orange-800">Payment Required</p>
-            <p className="text-sm text-orange-600">Pay the 500 THB registration fee to unlock job applications and recommendations.</p>
-          </div>
-          <Link href="/dashboard/applicant/profile">
-            <Button size="sm" variant="secondary">Pay Now</Button>
-          </Link>
-        </div>
-      )}
-
       {!user?.isVerified && user?.isPaid && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />

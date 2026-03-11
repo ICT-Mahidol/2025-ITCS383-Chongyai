@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useAuth } from '@/context/AuthContext';
 import api, { getApiErrorMessage } from '@/lib/api';
+import { useMyApplications } from '@/hooks/useApplications';
 import type { ApiResponse, User } from '@/types';
 
 interface ProfileForm {
@@ -30,6 +31,8 @@ interface PaymentForm {
 
 export default function ApplicantProfilePage() {
   const { user, updateUser } = useAuth();
+  const { applications } = useMyApplications();
+  const hasAcceptedApplication = applications.some((app) => app.status === 'ACCEPTED');
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
 
@@ -131,10 +134,18 @@ export default function ApplicantProfilePage() {
         <div className={`rounded-2xl p-4 border ${user?.isPaid ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200'}`}>
           <div className="flex items-center gap-2 mb-1">
             {user?.isPaid ? <CheckCircle className="w-4 h-4 text-green-600" /> : <CreditCard className="w-4 h-4 text-orange-500" />}
-            <span className="font-semibold text-sm">{user?.isPaid ? 'Payment Complete' : 'Payment Required'}</span>
+            <span className="font-semibold text-sm">
+              {user?.isPaid ? 'Payment Complete' : hasAcceptedApplication ? 'Payment Required' : 'Payment Pending'}
+            </span>
           </div>
-          {!user?.isPaid && (
-            <Button size="sm" onClick={handleInitiatePayment} className="mt-2 w-full">Pay 500 THB</Button>
+          {!user?.isPaid && hasAcceptedApplication && (
+            <>
+              <p className="text-sm text-gray-600">A job match has been made. Please complete payment to proceed.</p>
+              <Button size="sm" onClick={handleInitiatePayment} className="mt-2 w-full">Pay 500 THB</Button>
+            </>
+          )}
+          {!user?.isPaid && !hasAcceptedApplication && (
+            <p className="text-sm text-gray-600">Payment will be required once your application is accepted.</p>
           )}
           {payMsg && <p className="text-xs mt-1 text-green-700">{payMsg}</p>}
         </div>

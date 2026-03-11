@@ -84,7 +84,6 @@ export default function RegisterPage() {
                   }`}>
                   <Icon className={`w-6 h-6 mx-auto mb-1 ${selectedRole === value ? 'text-primary' : 'text-gray-400'}`} />
                   <p className={`font-semibold text-sm ${selectedRole === value ? 'text-primary' : 'text-gray-700'}`}>{label}</p>
-                  <p className="text-xs text-gray-400">{desc}</p>
                 </div>
               </label>
             ))}
@@ -114,7 +113,7 @@ export default function RegisterPage() {
           </form>
 
           <p className="text-xs text-gray-400 text-center mt-3">
-            A registration fee will be required after account creation.
+            You can browse jobs for free. A payment is required when you submit your first application.
           </p>
 
           <div className="mt-4 text-center">
