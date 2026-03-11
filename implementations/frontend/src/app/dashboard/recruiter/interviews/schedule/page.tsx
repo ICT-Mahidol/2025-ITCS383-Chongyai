@@ -100,11 +100,12 @@ function ScheduleInterviewForm() {
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <label htmlFor="scheduled-at" className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Calendar className="w-4 h-4 text-primary" />
             Date & Time
           </label>
           <Input
+            id="scheduled-at"
             type="datetime-local"
             value={formData.scheduledAt}
             onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })}
@@ -114,11 +115,12 @@ function ScheduleInterviewForm() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <label htmlFor="duration" className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <Clock className="w-4 h-4 text-primary" />
             Duration (minutes)
           </label>
           <Select
+            id="duration"
             options={[
               { value: '15', label: '15 minutes' },
               { value: '30', label: '30 minutes' },
@@ -154,11 +156,12 @@ function ScheduleInterviewForm() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <label htmlFor="notes" className="text-sm font-medium text-gray-700 flex items-center gap-2">
             <FileText className="w-4 h-4 text-primary" />
             Notes (optional)
           </label>
           <textarea
+            id="notes"
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
             placeholder="Add any additional notes or instructions for the interview..."

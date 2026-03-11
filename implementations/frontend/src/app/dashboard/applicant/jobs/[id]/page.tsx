@@ -127,8 +127,9 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
         <div className="space-y-4">
           <p className="text-sm text-gray-600">Applying for: <span className="font-semibold">{job.title}</span> at {companyName}</p>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Cover Letter (optional)</label>
+            <label htmlFor="cover-letter" className="text-sm font-medium text-gray-700 block mb-1">Cover Letter (optional)</label>
             <textarea
+              id="cover-letter"
               rows={5}
               value={coverLetter}
               onChange={(e) => setCoverLetter(e.target.value)}

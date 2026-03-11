@@ -73,8 +73,9 @@ export function JobForm({ defaultValues, onSubmit, isLoading, submitLabel = 'Pos
       <Input label="Job Title" error={errors.title?.message} {...register('title')} />
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-gray-700">Description</label>
+        <label htmlFor="description" className="text-sm font-medium text-gray-700">Description</label>
         <textarea
+          id="description"
           rows={4}
           className="w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
           {...register('description')}
@@ -83,8 +84,9 @@ export function JobForm({ defaultValues, onSubmit, isLoading, submitLabel = 'Pos
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-gray-700">Requirements</label>
+        <label htmlFor="requirements" className="text-sm font-medium text-gray-700">Requirements</label>
         <textarea
+          id="requirements"
           rows={3}
           className="w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
           {...register('requirements')}
@@ -110,9 +112,10 @@ export function JobForm({ defaultValues, onSubmit, isLoading, submitLabel = 'Pos
       <Input label="Expires At (optional)" type="datetime-local" {...register('expiresAt')} />
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-gray-700">Skills</label>
+        <label htmlFor="skill-input" className="text-sm font-medium text-gray-700">Skills</label>
         <div className="flex gap-2">
           <input
+            id="skill-input"
             value={skillInput}
             onChange={(e) => setSkillInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addSkill(); } }}

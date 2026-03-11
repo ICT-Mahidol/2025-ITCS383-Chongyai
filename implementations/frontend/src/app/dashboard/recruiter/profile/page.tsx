@@ -55,8 +55,9 @@ export default function RecruiterProfilePage() {
         <h2 className="font-bold text-gray-800">Company Info</h2>
         <Input label="Company Name" value={form.companyName} onChange={(e) => handleChange('companyName', e.target.value)} />
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Company Description</label>
+          <label htmlFor="company-description" className="text-sm font-medium text-gray-700">Company Description</label>
           <textarea
+            id="company-description"
             rows={3}
             value={form.companyDescription}
             onChange={(e) => handleChange('companyDescription', e.target.value)}
