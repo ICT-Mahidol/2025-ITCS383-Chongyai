@@ -45,12 +45,12 @@ Deconstructs the Backend structure to confirm a clear separation of concerns.
 
 ## 3.3.1 API Application
 
-![Component Diagram (Level 3)](images/C4_lv3_api.png)
+![alt text](images/C4_lv3_api.png)
 
 
 ## 3.3.2 Internal Conference Service
 
-![Component Diagram (Level 3)](images/C4_lv3_ICS.png)
+![alt text](images/C4_lv3_ics.png)
 
 ## 3.3.3 Identity Verify Service
 
