@@ -59,8 +59,3 @@ Deconstructs the Backend structure to confirm a clear separation of concerns.
 
 ---
 
-## 5. Class Diagram
-
-Defines the data model and entity relationships within the system.
-
-![Class Diagram](images/class_diagram.png)
