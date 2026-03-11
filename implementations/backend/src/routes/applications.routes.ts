@@ -24,15 +24,6 @@ router.post(
   validate(CreateApplicationSchema),
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const applicantUser = await prisma.user.findUnique({
-        where: { id: req.user!.id },
-        select: { isPaid: true },
-      });
-      if (!applicantUser?.isPaid) {
-        errorResponse(res, 'Payment required to apply for jobs', 402);
-        return;
-      }
-
       const { jobId, coverLetter } = req.body as z.infer<typeof CreateApplicationSchema>;
 
       const job = await prisma.job.findUnique({ where: { id: jobId, isActive: true } });

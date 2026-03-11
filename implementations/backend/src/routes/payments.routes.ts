@@ -37,6 +37,14 @@ router.post(
         return;
       }
 
+      const acceptedCount = await prisma.application.count({
+        where: { applicantId: req.user!.id, status: 'ACCEPTED' },
+      });
+      if (acceptedCount === 0) {
+        errorResponse(res, 'Payment can only be made after a job match', 403);
+        return;
+      }
+
       const amount = PAYMENT_AMOUNTS[req.user!.role] ?? 0;
       if (amount === 0) {
         errorResponse(res, 'No payment required for this role', 400);
