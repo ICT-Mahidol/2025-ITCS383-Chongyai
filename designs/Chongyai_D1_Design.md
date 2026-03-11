@@ -39,11 +39,33 @@ Illustrates the internal technologies and containers designed to handle 1,000 co
 
 ![Container Diagram (Level 2)](images/C4_lv2.png)
 
-### 3.3 Component Diagram (Level 3 - API Application)
+### 3.3 Component Diagram (Level 3)
 
 Deconstructs the Backend structure to confirm a clear separation of concerns.
 
-![Component Diagram (Level 3)](images/C4_lv3.png)
+## 3.3.1 API Application
+
+![Component Diagram (Level 3)](images/C4_lv3_api.png)
+
+
+## 3.3.2 Internal Conference Service
+
+![Component Diagram (Level 3)](images/C4_lv3_ICS.png)
+
+## 3.3.3 Identity Verify Service
+
+![alt text](images/C4_lv3_IVS.png)
+
+## 3.3.4 Backend [REST API]
+
+![alt text](images/C4_lv3_Backend.png)
+
+
+## 3.3.5 Admin Web Frontend
+
+![alt text](images/C4_lv3_admin.png)
+
+
 
 ---
 
