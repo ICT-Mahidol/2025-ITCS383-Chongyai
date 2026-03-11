@@ -14,11 +14,11 @@ export function useRequireAuth(requiredRole?: Role) {
   useEffect(() => {
     if (isLoading) return;
     if (!user) {
-      router.replaceAll('/auth/login');
+      router.replace('/auth/login');
       return;
     }
     if (requiredRole && user.role !== requiredRole) {
-      router.replaceAll('/dashboard/applicant');
+      router.replace('/dashboard/applicant');
     }
   }, [user, isLoading, requiredRole, router]);
 

@@ -36,7 +36,7 @@ export default function LoginPage() {
       const res = await api.post<ApiResponse<LoginResponse>>('/auth/login', data);
       const { token, user } = res.data.data;
       login(token, user);
-      router.replaceAll(getDashboardPath(user.role));
+      router.replace(getDashboardPath(user.role));
     } catch (err) {
       setError(getApiErrorMessage(err));
     }

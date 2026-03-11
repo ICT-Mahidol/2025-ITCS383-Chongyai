@@ -47,7 +47,7 @@ export default function RegisterPage() {
       const res = await api.post<ApiResponse<LoginResponse>>('/auth/register', data);
       const { token, user } = res.data.data;
       login(token, user);
-      router.replaceAll(getDashboardPath(user.role));
+      router.replace(getDashboardPath(user.role));
     } catch (err) {
       setError(getApiErrorMessage(err));
     }
@@ -79,8 +79,8 @@ export default function RegisterPage() {
               <label key={value} className="cursor-pointer">
                 <input type="radio" value={value} className="sr-only" {...register('role')} />
                 <div className={`border-2 rounded-xl p-3 text-center transition-colors ${selectedRole === value
-                    ? 'border-primary bg-orange-50'
-                    : 'border-gray-200 hover:border-orange-200'
+                  ? 'border-primary bg-orange-50'
+                  : 'border-gray-200 hover:border-orange-200'
                   }`}>
                   <Icon className={`w-6 h-6 mx-auto mb-1 ${selectedRole === value ? 'text-primary' : 'text-gray-400'}`} />
                   <p className={`font-semibold text-sm ${selectedRole === value ? 'text-primary' : 'text-gray-700'}`}>{label}</p>
